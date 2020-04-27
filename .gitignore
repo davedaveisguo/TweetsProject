@@ -1,0 +1,4 @@
+node_modules
+*.pug
+public/a1.js
+a2.js
