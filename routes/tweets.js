@@ -38,7 +38,8 @@ router.get('/', (req, res, next)=> {
 
 // create a file and append content
 router.post('/', (req,res,next)=> {
-    fs.appendFile(`./data/${req.body.filename}.txt`,req.body.content, (err)=>{
+    let filename = Math.floor(new Date().valueOf() * Math.random()) ;
+    fs.appendFile(`./data/${filename}.txt`,req.body.content, (err)=>{
         if(err) throw err;
         res.send(`the ${req.body.content} was added to the file`);
     })
@@ -47,7 +48,6 @@ router.post('/', (req,res,next)=> {
 
 // update a specific file
 router.put('/', (req,res,next)=>{
-
     fs.writeFile(`./data/${req.body.filename}.txt`, req.body.content, (err)=>{
         if(err) throw "the file failed to update";
         res.send(`the ${req.body.content} was updated to the file`);
@@ -56,7 +56,6 @@ router.put('/', (req,res,next)=>{
 
 // delete a specific file
 router.delete('/:id', function(req, res, next) {
-    console.log(`./data/${req.params.id}.txt`+"dssadasa");
     fs.unlink(`./data/${req.params.id}.txt`,(err)=>{
         if(err) throw 'file does not exist';
         res.send(`file ${req.params.id}.txt was deleted successfully`);
