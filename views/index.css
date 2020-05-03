@@ -1,0 +1,19 @@
+.container {
+    max-width: 1000px;
+    margin: 100px auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap:  wrap
+}
+.cas {
+    min-width: 100px;
+    margin: 30px;
+}
+.desc {
+    font-style: italic;
+    font-size: 12px;
+}
+.price {
+    font-size: 16px;
+    font-weight: bold;
+}

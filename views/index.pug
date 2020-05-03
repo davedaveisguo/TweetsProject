@@ -1,5 +1,18 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+html
+  head
+    style
+      include index.css
+  body
+    div.container
+      each book in bookstore
+        div.cas
+          div.image-container
+            img(src=book.thumbnailUrl, alt=book.title)
+          div.content-container
+            h4= book.title
+            ul 
+              each author in book.authors
+                li=author
+            p= "ISBN: is" + book.isbn
+            p.status= book.status
+            p.desc= book.shortDescription
