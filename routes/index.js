@@ -1,49 +1,52 @@
-const express=require('express');
-const router=express.Router();
-const Tweets=require('../models/tweets');
-const Users=require('../models/users');
+const express = require("express");
+const router = express.Router();
+const Tweets = require("../models/tweets");
+const passport = require("passport");
+const Users = require("../models/users");
 
-router.get('/users', (req,res)=>{
-    Users.find({}, (err, users)=>{
-        if(err) throw new Error('cannot find');
-        console.log(users);
-        res.status(200).json({
-            message: 'find users'
-        })
-    })
-})
+router.get("/", (req, res) => {
+  Tweets.find({}, (err, tweets) => {
+    console.log(tweets);
+    res.render("index", { tweets });
+  });
+});
 
-router.post('/', (req,res)=>{
-    const users= new Users({
-        name:"test111",
-        username:"moviestar",
-        location:"newYorker",
-        bio:"this is yuyan developer",
-        avatarUrl:"/img/webdxd.png"
-    });
-    users.save().then(result=>{
-        res.status(201).json({
-            message: "user added successfully",
-            postId: result._id,
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+
+router.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+router.post("/login", passport.authenticate("local"), (req, res) => {
+  res.redirect("/");
+});
+
+router.post("/signup", (req, res, next) => {
+  const { username, password, confirmPassword } = req.body;
+  if (password === confirmPassword) {
+    Users.register(
+      new Users({ username, name: username }),
+      password,
+      (err, user) => {
+        if (err) {
+          return next(err);
+        }
+
+        passport.authenticate("local")(req, res, () => {
+          return res.redirect("/");
         });
-    })
-
-})
-
-router.get('/', (req,res)=>{
-    Tweets.find({}, (err,tweets)=>{
-        console.log(tweets);
-        res.render('index', {tweets})
-    })
+      }
+    );
+  } else {
+    return next({ message: "Password not match" });
+  }
 });
 
-
-router.get('/login', (req,res)=>{
-    res.render('login');
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/login");
 });
 
-router.get('/signup', (req,res)=>{
-    res.render('signup');
-});
-
-module.exports=router;
+module.exports = router;
