@@ -7,8 +7,9 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require('passport');
 const session = require('express-session');
-const LocalStrategy = require('passport-local').Strategy;
+require('passport-local').Strategy;
 const Users = require('./models/users');
+const Tweets= require('./models/tweets');
 app.locals.moment = require("moment");
 
 const index = require("./routes/index");
@@ -41,12 +42,14 @@ app.use(session({
   cookie:{secure: false}
 }));
 
+
+
 //Apply passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+passport.use(Users.createStrategy());
 
 // Config passport middleware
-passport.use(Users.createStrategy());
 passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser()); 
 
@@ -56,8 +59,14 @@ app.use(cookieParser());
 app.use(logger("dev"));
 app.use((req,res,next)=>{
   res.locals.user= req.user;
-  console.log(req.user);
   next();
+});
+
+app.use((req,res,next)=>{
+  Tweets.find({}, (err,tweets)=>{
+    res.locals.tweets= tweets;
+    next();
+  })
 });
 
 

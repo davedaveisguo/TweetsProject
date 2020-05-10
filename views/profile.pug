@@ -4,9 +4,8 @@ block content
     .container
         .col-2of5.bg-white.profile
             img.avatar(src="/img/avatar.jpg" alt="avatar")
-            h3 {user}
-            h5 @honlyan
-            h4
+            h3 #{user.name}
+            h5 @#{user.username}
                 i.fas.fa-map-marker-alt
                 |  Vancouver
             p.center

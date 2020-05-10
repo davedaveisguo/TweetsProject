@@ -10,6 +10,7 @@ const userSchema = new Schema({
   bio: String,
   avatarUrl: { type: String, default: "/img/webdxd.png" },
 });
+// enable password
 userSchema.plugin(passportLocalMongoose);
 
 
